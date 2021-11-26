@@ -12,7 +12,7 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId 
         if (res.code) {
           wx.request({
-            url: 'http://www.taijuai.com/route/wechat/Get_WXApp_OPENID',
+            url: 'https://www.taijuai.com/route/wechat/Get_WXApp_OPENID',
             //仅为示例，并非真实的接口地址
             method: "GET",
             data: {
