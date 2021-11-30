@@ -1,0 +1,23 @@
+<!--pages/bind/bind.wxml-->
+<!--WXML示例代码-->
+<mp-toptips msg="{{error}}" type="error" show="{{error}}"></mp-toptips>
+<mp-form id="form" rules="{{rules}}" models="{{form}}">
+    <mp-cells>
+        <mp-cell prop="mobile" title="手机号" >
+                    <input bindinput="formInputChange" data-field="mobile" class="weui-input" placeholder="请输入手机号"/>
+                </mp-cell>
+        <mp-cell prop="vcode" title="图形验证码" ext-class="weui-cell_vcode">
+                    <input bindinput="formInputChange" data-field="vcode" value="{{form.vcode}}" class="weui-input" placeholder="请输入验证码"/>
+                    <image slot="footer" class="weui-vcode-img" id="imgcode" bindtap="upimgurlcode" src="https://www.taijuai.com/route/wechat/GetValidateCode2?vccode={{vcode2}}"  style="width: 108px"></image>
+        </mp-cell>
+        <mp-cell class="form_item" prop="verificationcode" title="短信验证码" ext-class="weui-cell_vcode">
+            <input bindinput="formInputChange" value="{{form.verificationcode}}" data-field="verificationcode" class="weui-input" placeholder="请输入短信验证码" />
+            <view slot="footer" class="weui-vcode-btn {{p_class}}" id="vcodebtn" bindtap="getvcode">{{yztext}}</view>
+        </mp-cell>
+    </mp-cells>
+    <!--提交按钮-->
+    <view class="submit_btn_wrap" id="botbut">
+        <button class="weui-btn" type="primary" bindtap="submitForm">绑定</button>
+        <button type="warn" bindtap="restForm" plain class="mt-10">取消</button>
+    </view>
+</mp-form>

@@ -10,7 +10,7 @@ App({
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId 
-        console.log(res);
+        // console.log(res);
         if (res.code) {
           wx.request({
             url: 'https://www.taijuai.com/route/wechat/Get_WXApp_OPENID',
@@ -24,10 +24,11 @@ App({
               // 默认值
             },
             success: function (res) {
-              if (res.data.openid) {
+            // console.log(res);
+              if (res.data) {
                 wx.setStorage({
                   key: "tokenId",
-                  data: res.data.openid,
+                  data: res.data,
                 })
               }
             }

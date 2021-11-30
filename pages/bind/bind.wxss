@@ -1,0 +1,13 @@
+/* pages/bind/bind.wxss */
+#botbut{
+    margin-top: 20vw;
+}
+.mt-10{
+    margin-top: 5vw;
+}
+.p-e-none{
+    pointer-events: none;
+}
+.p-e-auto{
+    pointer-events: auto;
+}

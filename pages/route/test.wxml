@@ -1,4 +1,4 @@
 <!--pages/route/test.wxml-->
-<view>
-    
+<view class="container">
+   <web-view src="https://www.taijuai.com/route/WeChat/billcheck?openId=ovptbt3RWrJ5fZShXxniU-LEUTiY"></web-view>
 </view>
