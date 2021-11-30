@@ -1,4 +1,28 @@
 <!--pages/route/test.wxml-->
-<view class="container">
+<!-- <view class="container">
    <web-view src="https://www.taijuai.com/route/WeChat/billcheck?openId=ovptbt3RWrJ5fZShXxniU-LEUTiY"></web-view>
+</view> -->
+
+<!--
+  输入验证码
+-->
+<!--
+  输入验证码
+-->
+<view class="insert-code">
+   <mp-toptips msg="{{error}}" type="error" show="{{error}}"></mp-toptips>
+   <view>
+      <view class="insert-title">请输入验证码</view>
+      <view class="insert-tips">验证码已发送至{{phoneNum}}</view>
+   </view>
+   <view>
+      <view class="v-code flex-content">
+         <block wx:for="{{6}}" wx:key="item">
+            <input data-code="v" class="{{vCodeValue.length === index && isVFocus ? 'is-input' : ''}}" type="number" value="{{vCodeValue.length>=index+1 ? vCodeValue[index] : ''}}" disabled catchtap="tapFn"></input>
+         </block>
+      </view>
+      <input type="number" class="ipt" maxlength="6" focus="{{isVFocus}}" bindinput="showVCode"></input>
+   </view>
+   <view class="mr">没收到验证码？<label class="c-blue {{bindclass}}" bindtap="Resend">{{bindtext}}</label></view>
+   <mp-loading show="{{loding}}" animated="{{loding}}" tips="短信验证中" type="circle"></mp-loading>
 </view>

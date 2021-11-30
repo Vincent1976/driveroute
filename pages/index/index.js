@@ -48,7 +48,7 @@ Page({
   },
   ck(e){
     wx.navigateTo({
-      url: '../bind/bind'
+      url: '../route/test?mobile=17708409365'
     })
   }
 })

@@ -11,3 +11,9 @@
 .p-e-auto{
     pointer-events: auto;
 }
+#vcodebtn{
+    float: right;
+    margin-top: 5vw;
+    margin-right: 5vw;
+    color: cornflowerblue;
+}

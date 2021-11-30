@@ -3,7 +3,8 @@
         "pages/index/index",
         "pages/logs/logs",
         "pages/route/test",
-        "pages/bind/bind"
+        "pages/bind/bind",
+        "pages/route/route"
     ],
     "window": {
         "backgroundTextStyle": "light",
