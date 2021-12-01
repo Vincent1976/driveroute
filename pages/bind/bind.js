@@ -1,4 +1,5 @@
 // pages/bind/bind.js
+import { mps } from "../../utils/util"
 Page({
 
     /**
@@ -106,20 +107,25 @@ Page({
                     })
                     return;
                 }
-                wx.request({
-                    url: 'https://www.taijuai.com/route/wechat/getMesCode2',
-                    method: "GET",
-                    data: {
-                        "userPhone": that.data.form.mobile,
-                        "userdb": "securall"
-                    },
-                    success: function (res) {
-                        //console.log(res);
-                        if (res.data.indexOf("失败") > 0) {
+                mps('Querymultisystem',{'userphone':that.data.form.mobile},'get').then((e)=>{
+                    if(e.data.indexOf("error") >= 0){
+                        that.setData({
+                            error:e.data
+                        })
+                        return
+                    }
+                    if(e.data.total==0){
+                        that.setData({
+                            error:'该手机号未注册系统，请联系管理员'
+                        })
+                        return
+                    }
+                    mps('getMesCode2',{'userPhone':that.data.form.mobile},'get').then((res)=>{
+                        if (res.data.indexOf("失败") >= 0) {
                             that.setData({
                                 error: res.data
                             })
-                        } else {
+                        }else{
                             wx.showToast({
                                 title: '短信验证码发送成功'
                             })
@@ -127,8 +133,9 @@ Page({
                                 url: '../route/test?mobile='+that.data.form.mobile
                             })
                         }
-                    }
+                    })
                 })
+              
             }
         })
     },

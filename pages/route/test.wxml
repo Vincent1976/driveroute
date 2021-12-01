@@ -25,10 +25,17 @@
    </view>
    <view class="mr">没收到验证码？<label class="c-blue {{bindclass}}" bindtap="Resend">{{bindtext}}</label></view>
    <mp-loading show="{{loding}}" animated="{{loding}}" tips="短信验证中" type="circle"></mp-loading>
-   <mp-dialog title="请选择系统" buttons="{{buttons}}" mask="{{true}}" mask-closable="{{false}}" show="{{dialog}}" bindclose="" bindbuttontap="tapDialogButton">
+   <mp-dialog title="请选择账户" buttons="{{buttons}}" mask="{{true}}" mask-closable="{{false}}" show="{{dialog}}" bindclose="" bindbuttontap="tapDialogButton">
       <mp-cells title="">
     <mp-checkbox-group prop="radio" multi="{{false}}" bindchange="radioChange">
         <mp-checkbox wx:for="{{radioItems}}" wx:key="value" label="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"></mp-checkbox>
+    </mp-checkbox-group>
+</mp-cells>
+   </mp-dialog>
+   <mp-dialog title="请选择绑定系统" buttons="{{buttons}}" mask="{{true}}" mask-closable="{{false}}" show="{{systemdialog}}" bindclose="" bindbuttontap="systemButton">
+      <mp-cells title="">
+    <mp-checkbox-group prop="radio" multi="{{false}}" bindchange="systemChange">
+        <mp-checkbox wx:for="{{systemItems}}" wx:key="value" label="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"></mp-checkbox>
     </mp-checkbox-group>
 </mp-cells>
    </mp-dialog>

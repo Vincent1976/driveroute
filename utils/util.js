@@ -18,7 +18,7 @@ const mps=(url,data,method)=>{
   wx.request({
     url: 'https://www.taijuai.com/route/wechat/'+url,
     data: data,
-    type:method,
+    type:method??'get',
     success: (res) => {
      return r(res);
     },

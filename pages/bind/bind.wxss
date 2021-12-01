@@ -4,6 +4,8 @@
 }
 .mt-10{
     margin-top: 5vw;
+    color:#928d8d ;
+    border: 1px solid #928d8d;
 }
 .p-e-none{
     pointer-events: none;

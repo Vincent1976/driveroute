@@ -15,6 +15,6 @@
     <!--提交按钮-->
     <view class="submit_btn_wrap" id="botbut">
         <button class="weui-btn" type="primary" bindtap="submitForm">获取验证码</button>
-        <button type="warn" bindtap="restForm" plain class="mt-10">取消</button>
+        <button type="light" bindtap="restForm" class="mt-10">返回</button>
     </view>
 </mp-form>

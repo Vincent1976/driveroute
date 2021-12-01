@@ -19,17 +19,36 @@ Page({
       text: '确定'
     }],
     dialog: false,
-    radioItems: [
-
-    ],
+    radioItems: [],
+    systemItems: [],
+    systemdialog: false,
+    userflag:''
   },
+  //验证码输入是触发事件
   showVCode: function (e) {
     const that = this;
     that.setData({
       vCodeValue: e.detail.value,
     });
     if (that.data.vCodeValue.length == 6) {
-      that.Submitbinding()
+      mps('Querymultisystem', { 'userphone': that.data.phoneNum }, 'get').then((res) => {
+        const { data } = res
+        if (data.total == 1) {
+          that.Submitbinding(data.rows[0].userflag)
+        } else if (data.total > 1) {
+          let arrsystem = []
+          for (let i = 0; i < data.total; i++) {
+            if (i === 0)
+              arrsystem.push({ name: data.rows[i].username, value: data.rows[i].userflag, checked: true })
+            else
+              arrsystem.push({ name: data.rows[i].username, value: data.rows[i].userflag })
+          }
+          that.setData({
+            systemItems: arrsystem,
+            systemdialog: true
+          })
+        }
+      })
     }
   },
   tapFn(e) {
@@ -47,64 +66,16 @@ Page({
       phoneNum: option.mobile
     })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function (option) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-  Submitbinding() {
+  //提交短信验证码到后台验证
+  Submitbinding(userflag) {
     const that = this
     that.setData({
       loding: true
     })
     let userdata = {
-      'userflag': 'ro',
+      'userflag': userflag,
       'userphone': that.data.phoneNum,
-      'openid': 'ovptbt8ANFwFTwzCGNm_BxnmeDks',
+      'openid': wx.getStorageSync('tokenId'),
       'smscode': that.data.vCodeValue
     }
     let date = mps('getMobileIndex', userdata, 'get')
@@ -143,6 +114,7 @@ Page({
       }
     })
   },
+  //重新获取短信验证码
   Resend() {
     const that = this
     let i = 60
@@ -153,8 +125,7 @@ Page({
       url: 'https://www.taijuai.com/route/wechat/getMesCode2',
       method: "GET",
       data: {
-        "userPhone": that.data.phoneNum,
-        "userdb": "securall"
+        "userPhone": that.data.phoneNum
       },
       success: function (res) {
         if (res.data.indexOf('失败') >= 0) {
@@ -183,21 +154,20 @@ Page({
       }
     })
   },
+  //如果一个系统多大账户显示的选择框的按钮触发事件
   tapDialogButton(e) {
     const that = this
     const _btn = e.detail.item.text;
     if (_btn == '确定') {
-      //console.log('确定');
-      //console.log(that.data.radioItems)
       let users = that.data.radioItems.filter((item) => {
         return item.checked == true
       })
       wx.request({
         url: 'https://www.taijuai.com/route/wechat/loginChangeUser',
         data: {
-          'userflag': 'ro',
+          'userflag': that.data.userflag,
           'userphone': that.data.phoneNum,
-          'openid': 'ovptbt8ANFwFTwzCGNm_BxnmeDks',
+          'openid': wx.getStorageSync('tokenId'),
           'userid': users[0].value
         },
         success: (res) => {
@@ -220,17 +190,45 @@ Page({
       dialog: false,
     })
   },
+  //单选框点击时触发事件
   radioChange: function (e) {
     // console.log('radio发生change事件，携带value值为：', e.detail.value);
 
     var radioItems = this.data.radioItems;
     for (var i = 0, len = radioItems.length; i < len; ++i) {
-      radioItems[i].checked = radioItems[i].value == e.detail.value;
+      radioItems[i].checked = radioItems[i].value == e.detail.value
     }
-
     this.setData({
       radioItems: radioItems,
       [`formData.radio`]: e.detail.value
-    });
+    })
+  },
+  //多个系统弹框按钮点击事件
+  systemButton(e) {
+    const that = this
+    const _btn = e.detail.item.text;
+    if (_btn == '确定') {
+      let systems = that.data.systemItems.filter((item) => {
+        return item.checked == true
+      })
+      that.setData({
+        userflag:systems[0].value
+      })
+      that.Submitbinding(systems[0].value)
+    }
+    this.setData({
+      systemdialog: false,
+    })
+  },
+  //单选框点击时触发事件
+  systemChange: function (e) {
+    var systemItems = this.data.systemItems;
+    for (var i = 0, len = systemItems.length; i < len; ++i) {
+      systemItems[i].checked = systemItems[i].value == e.detail.value;
+    }
+    this.setData({
+      systemItems: systemItems,
+      [`formData.radio`]: e.detail.value
+    })
   },
 })
