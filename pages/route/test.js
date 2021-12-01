@@ -1,4 +1,5 @@
 // pages/route/test.js
+import { mps } from "../../utils/util"
 Page({
 
   /**
@@ -11,7 +12,16 @@ Page({
     openId: '',
     loding: false,
     bindclass: 'bindclass',
-    bindtext: '重新发送'
+    bindtext: '重新发送',
+    buttons: [{
+      text: '取消'
+    }, {
+      text: '确定'
+    }],
+    dialog: false,
+    radioItems: [
+
+    ],
   },
   showVCode: function (e) {
     const that = this;
@@ -91,24 +101,38 @@ Page({
     that.setData({
       loding: true
     })
-    wx.request({
-      url: 'https://www.taijuai.com/route/wechat/getMobileIndex',
-      data: {
-        'userflag': 'ro',
-        'userphone': that.data.phoneNum,
-        'openid': 'ovptbt8ANFwFTwzCGNm_BxnmeDks',
-        'smscode': that.data.vCodeValue
-      },
-      success: (res) => {
+    let userdata = {
+      'userflag': 'ro',
+      'userphone': that.data.phoneNum,
+      'openid': 'ovptbt8ANFwFTwzCGNm_BxnmeDks',
+      'smscode': that.data.vCodeValue
+    }
+    let date = mps('getMobileIndex', userdata, 'get')
+    date.then((res) => {
+      that.setData({
+        loding: false
+      })
+      if (res.data.indexOf('error:') >= 0) {
         that.setData({
-          loding: false
+          error: res.data
         })
-        if (res.data.indexOf('error:') >= 0) {
-          that.setData({
-            error: res.data
-          })
-          return
+        return
+      } else if (res.data.indexOf('多个账户') >= 0) {
+        let raioditem = JSON.parse(res.data.split('&')[1])
+        that.setData({
+          dialog: true
+        })
+        let raioditems = []
+        for (var i = 0; i < raioditem.total; i++) {
+          if (i === 0)
+            raioditems.push({ name: raioditem.rows[i].usernm, value: raioditem.rows[i].userid, checked: true })
+          else
+            raioditems.push({ name: raioditem.rows[i].usernm, value: raioditem.rows[i].userid })
         }
+        that.setData({
+          radioItems: raioditems
+        })
+      } else {
         wx.setStorage({
           key: "myurl",
           data: res.data,
@@ -123,7 +147,7 @@ Page({
     const that = this
     let i = 60
     that.setData({
-      bindclass:'.p-e-none'
+      bindclass: '.p-e-none'
     })
     wx.request({
       url: 'https://www.taijuai.com/route/wechat/getMesCode2',
@@ -133,7 +157,6 @@ Page({
         "userdb": "securall"
       },
       success: function (res) {
-        console.log(res);
         if (res.data.indexOf('失败') >= 0) {
           that.setData({
             error: res.data,
@@ -159,5 +182,55 @@ Page({
         }, 1000)
       }
     })
-  }
+  },
+  tapDialogButton(e) {
+    const that = this
+    const _btn = e.detail.item.text;
+    if (_btn == '确定') {
+      //console.log('确定');
+      //console.log(that.data.radioItems)
+      let users = that.data.radioItems.filter((item) => {
+        return item.checked == true
+      })
+      wx.request({
+        url: 'https://www.taijuai.com/route/wechat/loginChangeUser',
+        data: {
+          'userflag': 'ro',
+          'userphone': that.data.phoneNum,
+          'openid': 'ovptbt8ANFwFTwzCGNm_BxnmeDks',
+          'userid': users[0].value
+        },
+        success: (res) => {
+          if (res.data.indexOf('error') >= 0) {
+            that.setData({
+              error: res.data
+            })
+            return
+          } wx.setStorage({
+            key: "myurl",
+            data: res.data,
+          })
+          wx.navigateTo({
+            url: '../route/route'
+          })
+        }
+      })
+    }
+    this.setData({
+      dialog: false,
+    })
+  },
+  radioChange: function (e) {
+    // console.log('radio发生change事件，携带value值为：', e.detail.value);
+
+    var radioItems = this.data.radioItems;
+    for (var i = 0, len = radioItems.length; i < len; ++i) {
+      radioItems[i].checked = radioItems[i].value == e.detail.value;
+    }
+
+    this.setData({
+      radioItems: radioItems,
+      [`formData.radio`]: e.detail.value
+    });
+  },
 })

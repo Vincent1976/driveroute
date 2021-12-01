@@ -13,7 +13,22 @@ const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : `0${n}`
 }
+const mps=(url,data,method)=>{
+ return new Promise((r,j)=>{
+  wx.request({
+    url: 'https://www.taijuai.com/route/wechat/'+url,
+    data: data,
+    type:method,
+    success: (res) => {
+     return r(res);
+    },
+    fail:(error)=>{
+      return j(error);
+    }
+  })
+ })
+}
 
 module.exports = {
-  formatTime
+  formatTime,mps
 }
