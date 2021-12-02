@@ -22,7 +22,7 @@ Page({
     radioItems: [],
     systemItems: [],
     systemdialog: false,
-    userflag:''
+    userflag: ''
   },
   //验证码输入是触发事件
   showVCode: function (e) {
@@ -36,18 +36,33 @@ Page({
         if (data.total == 1) {
           that.Submitbinding(data.rows[0].userflag)
         } else if (data.total > 1) {
-          let arrsystem = []
-          for (let i = 0; i < data.total; i++) {
-            if (i === 0)
-              arrsystem.push({ name: data.rows[i].username, value: data.rows[i].userflag, checked: true })
-            else
-              arrsystem.push({ name: data.rows[i].username, value: data.rows[i].userflag })
-          }
-          that.setData({
-            systemItems: arrsystem,
-            systemdialog: true
+          mps('Querymultisystem_distinct', { 'userphone': that.data.phoneNum }, 'get').then((mydata) => {
+            if (mydata.data.total == 1) {
+              that.Submitbinding(mydata.data.rows[i].userflag)
+            } else if (mydata.data.total > 1) {
+              let arrsystem = []
+              for (let i = 0; i < mydata.data.total; i++) {
+
+                if (i === 0)
+                  arrsystem.push({ name: mydata.data.rows[i].username, value: mydata.data.rows[i].userflag, checked: true })
+                else
+                  arrsystem.push({ name: mydata.data.rows[i].username, value: mydata.data.rows[i].userflag })
+              }
+              that.setData({
+                systemItems: arrsystem,
+                systemdialog: true
+              })
+            }
+          }).catch((error) => {
+            that.setData({
+              error: error?.data
+            })
           })
         }
+      }).catch((error) => {
+        that.setData({
+          error: error?.data
+        })
       })
     }
   },
@@ -78,7 +93,7 @@ Page({
       'openid': wx.getStorageSync('tokenId'),
       'smscode': that.data.vCodeValue
     }
-    let date = mps('getMobileIndex', userdata, 'get')
+    let date = mps('getMobileIndex_new', userdata, 'get')
     date.then((res) => {
       that.setData({
         loding: false
@@ -212,7 +227,7 @@ Page({
         return item.checked == true
       })
       that.setData({
-        userflag:systems[0].value
+        userflag: systems[0].value
       })
       that.Submitbinding(systems[0].value)
     }

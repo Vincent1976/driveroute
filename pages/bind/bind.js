@@ -100,39 +100,38 @@ Page({
                         error: errors[firstError[0]].message
                     })
                 }
-            } else {
+            }else {
                 if (that.data.form.vcode.toUpperCase() != that.data.vcode2.toUpperCase()) {
                     that.setData({
                         error: "图形验证码错误",
                     })
                     return;
                 }
+                that.setData({
+                    p_class:'.p-e-none'
+                })
                 mps('Querymultisystem',{'userphone':that.data.form.mobile},'get').then((e)=>{
-                    if(e.data.indexOf("error") >= 0){
-                        that.setData({
-                            error:e.data
-                        })
-                        return
-                    }
+                    that.setData({
+                        p_class:'.p-e-auto'
+                    })
                     if(e.data.total==0){
                         that.setData({
-                            error:'该手机号未注册系统，请联系管理员'
+                            error:'该手机号未注册系统，请联系管理员',
+                            p_class:'.p-e-auto'
                         })
                         return
                     }
                     mps('getMesCode2',{'userPhone':that.data.form.mobile},'get').then((res)=>{
-                        if (res.data.indexOf("失败") >= 0) {
-                            that.setData({
-                                error: res.data
-                            })
-                        }else{
                             wx.showToast({
                                 title: '短信验证码发送成功'
                             })
                             wx.navigateTo({
                                 url: '../route/test?mobile='+that.data.form.mobile
                             })
-                        }
+                    }).catch((error)=>{
+                        that.setData({
+                            error: error.data,
+                        })
                     })
                 })
               

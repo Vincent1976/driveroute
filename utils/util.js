@@ -20,7 +20,11 @@ const mps=(url,data,method)=>{
     data: data,
     type:method??'get',
     success: (res) => {
-     return r(res);
+      if(res.data.toString().indexOf('error')>=0){
+        return j(res);
+      }else{
+        return r(res);
+      }
     },
     fail:(error)=>{
       return j(error);

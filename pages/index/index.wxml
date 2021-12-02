@@ -1,4 +1,5 @@
 <!--index.wxml-->
+<mp-toptips msg="{{error}}" type="error" show="{{error}}"></mp-toptips>
 <view class="container">
   <view class="userinfo">
     <block wx:if="{{canIUseOpenData}}">
@@ -21,11 +22,11 @@
     <button type="primary" plain="true" id="btnLogin" bindtap="userlogin">登录</button>
   </view>
 </view>
-<mp-loading show="{{false}}" animated="{{false}}" tips="登录查询中" type="circle"></mp-loading>
-<mp-dialog title="请选择系统" buttons="{{buttons}}" mask="{{true}}" mask-closable="{{false}}" show="{{dialog}}" bindclose="" bindbuttontap="tapDialogButton">
+<mp-loading show="{{Loginloading}}" animated="{{Loginloading}}" tips="登录中..." type="circle"></mp-loading>
+<!-- <mp-dialog title="请选择系统" buttons="{{buttons}}" mask="{{true}}" mask-closable="{{false}}" show="{{dialog}}" bindclose="" bindbuttontap="tapDialogButton">
       <mp-cells title="">
     <mp-checkbox-group prop="radio" multi="{{false}}" bindchange="radioChange">
         <mp-checkbox wx:for="{{radioItems}}" wx:key="value" label="{{item.name}}" value="{{item.value}}" checked="{{item.checked}}"></mp-checkbox>
     </mp-checkbox-group>
 </mp-cells>
-</mp-dialog>
+</mp-dialog> -->

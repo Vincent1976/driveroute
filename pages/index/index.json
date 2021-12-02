@@ -4,6 +4,7 @@
     "mp-dialog": "../../miniprogram_npm/weui-miniprogram/dialog/dialog",
     "mp-checkbox-group": "../../miniprogram_npm/weui-miniprogram/checkbox-group/checkbox-group",
     "mp-checkbox": "../../miniprogram_npm/weui-miniprogram/checkbox/checkbox",
-    "mp-cells": "../../miniprogram_npm/weui-miniprogram/cells/cells"
+    "mp-cells": "../../miniprogram_npm/weui-miniprogram/cells/cells",
+    "mp-toptips": "../../miniprogram_npm/weui-miniprogram/toptips/toptips"
   }
 }
