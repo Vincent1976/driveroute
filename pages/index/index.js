@@ -74,10 +74,10 @@ Page({
           url: '../bind/bind'
         })
       } else if (data.total == 1) {
-        mps('Viewusertypes', { 'openid': data.rows[0].openid, 'userflag': data.rows[0].userflag }, 'get').then((res) => {
+        mps('Viewusertypes', { 'openid': data.rows[0].openid, 'userflag': data.rows[0].userflag }, 'get').then((mydata) => {
           wx.setStorage({
             key: "myurl",
-            data: res.data,
+            data: mydata.data,
           })
           wx.navigateTo({
             url: '../route/route'
