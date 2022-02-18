@@ -17,4 +17,5 @@
         <button class="weui-btn {{p_class}}" type="primary" bindtap="submitForm">获取验证码</button>
         <button type="light" bindtap="restForm" class="mt-10">返回</button>
     </view>
+    <mp-loading show="{{primaryloding}}" animated="{{primaryloding}}" tips="获取验证码..." type="circle"></mp-loading>
 </mp-form>

@@ -59,6 +59,9 @@ Page({
   },
   //判断用户openid是否绑定
   userlogin(e) {
+    // wx.navigateTo({
+    //           url: '../route/test?mobile=17708409365'
+    //         })
     const that = this
     that.setData({
       Loginloading: true
@@ -68,7 +71,6 @@ Page({
         Loginloading: false
       })
       const { data } = res
-      console.log(data);
       if (data.total == 0) {
         wx.navigateTo({
           url: '../bind/bind'

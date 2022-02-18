@@ -11,6 +11,7 @@ Page({
             vcode: ''
         },
         yztext: '获取验证码',
+        primaryloding:false,
         p_class: ".p-e-auto",
         errorMsg: '', // 验证表单显示错误信息
         vcode2: '1234',
@@ -108,11 +109,13 @@ Page({
                     return;
                 }
                 that.setData({
-                    p_class:'.p-e-none'
+                    p_class:'.p-e-none',
+                    primaryloding:true
                 })
                 mps('Querymultisystem',{'userphone':that.data.form.mobile},'get').then((e)=>{
                     that.setData({
-                        p_class:'.p-e-auto'
+                        p_class:'.p-e-auto',
+                        primaryloding:false
                     })
                     if(e.data.total==0){
                         that.setData({

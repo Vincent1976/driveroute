@@ -33,10 +33,12 @@ Page({
     if (that.data.vCodeValue.length == 6) {
       mps('Querymultisystem', { 'userphone': that.data.phoneNum }, 'get').then((res) => {
         const { data } = res
+        console.log(data);
         if (data.total == 1) {
           that.Submitbinding(data.rows[0].userflag)
         } else if (data.total > 1) {
           mps('Querymultisystem_distinct', { 'userphone': that.data.phoneNum }, 'get').then((mydata) => {
+            console.log(mydata);
             if (mydata.data.total == 1) {
               that.Submitbinding(mydata.data.rows[i].userflag)
             } else if (mydata.data.total > 1) {
@@ -98,15 +100,11 @@ Page({
       that.setData({
         loding: false
       })
-      if (res.data.indexOf('error:') >= 0) {
-        that.setData({
-          error: res.data
-        })
-        return
-      } else if (res.data.indexOf('多个账户') >= 0) {
+       if (res.data.indexOf('多个账户') >= 0) {
         let raioditem = JSON.parse(res.data.split('&')[1])
         that.setData({
-          dialog: true
+          dialog: true,
+          userflag:userflag
         })
         let raioditems = []
         for (var i = 0; i < raioditem.total; i++) {
@@ -127,6 +125,10 @@ Page({
           url: '../route/route?myurl=' + res.data
         })
       }
+    }).catch((error)=>{
+      that.setData({
+        error:error.data
+      })
     })
   },
   //重新获取短信验证码
@@ -177,6 +179,7 @@ Page({
       let users = that.data.radioItems.filter((item) => {
         return item.checked == true
       })
+      console.log(that.data.userflag);
       wx.request({
         url: 'https://www.taijuai.com/route/wechat/loginChangeUser',
         data: {
